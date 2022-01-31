@@ -6,7 +6,7 @@ on:
 
 jobs:
   app_build:
-    name: Github, Firebase, and Sentry Release
+    name: Github Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -112,14 +112,14 @@ jobs:
           asset_name: home-assistant-wear-${{steps.rel_number.outputs.version}}.apk
           asset_content_type: application/zip
 
-      - name: Deploy to Firebase
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
-          KEYSTORE_ALIAS: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
-          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS_PASSWORD }}
-          VERSION: ${{ steps.rel_number.outputs.version }}
-          VERSION_CODE: ${{ steps.rel_number.outputs.version-code }}
-        run: ./gradlew appDistributionUploadFullRelease
+#      - name: Deploy to Firebase
+#        env:
+#          KEYSTORE_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
+#          KEYSTORE_ALIAS: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
+#          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS_PASSWORD }}
+#          VERSION: ${{ steps.rel_number.outputs.version }}
+#          VERSION_CODE: ${{ steps.rel_number.outputs.version-code }}
+#        run: ./gradlew appDistributionUploadFullRelease
 
 #      - name: Create a Sentry.io release
 #        uses: tclindner/sentry-releases-action@v1.2.0
