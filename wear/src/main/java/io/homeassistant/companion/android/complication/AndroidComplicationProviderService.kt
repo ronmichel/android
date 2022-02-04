@@ -38,7 +38,7 @@ import java.util.Locale
  * Note: This class uses the suspending variation of complication data source service to support
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
-@AndroidEntryPoint
+
 class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceService() {
     
     @Inject
