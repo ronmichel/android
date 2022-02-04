@@ -41,7 +41,6 @@ import java.util.Locale
 
 class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceService() {
     
-    @Inject
     lateinit var integrationUseCase: IntegrationRepository
 
     /*
