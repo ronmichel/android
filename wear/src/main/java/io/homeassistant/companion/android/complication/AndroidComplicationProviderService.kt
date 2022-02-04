@@ -17,6 +17,7 @@ package io.homeassistant.companion.android.complication
 
 import android.content.ComponentName
 import android.util.Log
+import android.support.wearable.complications.*
 import androidx.wear.complications.data.ComplicationData
 import androidx.wear.complications.data.ComplicationText
 import androidx.wear.complications.data.ComplicationType
