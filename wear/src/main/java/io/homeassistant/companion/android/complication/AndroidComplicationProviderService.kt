@@ -17,7 +17,14 @@ package io.homeassistant.companion.android.complication
 
 import android.content.ComponentName
 import android.util.Log
-import android.support.wearable.complications.*
+import androidx.wear.watchface.complications.data.ComplicationData
+import androidx.wear.watchface.complications.data.ComplicationType
+import androidx.wear.watchface.complications.data.LongTextComplicationData
+import androidx.wear.watchface.complications.data.PlainComplicationText
+import androidx.wear.watchface.complications.data.RangedValueComplicationData
+import androidx.wear.watchface.complications.data.ShortTextComplicationData
+import androidx.wear.watchface.complications.datasource.ComplicationRequest
+import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
@@ -28,7 +35,7 @@ import java.util.Locale
  * Note: This class uses the suspending variation of complication data source service to support
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
-class AndroidComplicationDataSourceService : ComplicationProviderService() {
+class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceService() {
 
     /*
      * Called when a complication has been activated. The method is for any one-time
