@@ -17,14 +17,16 @@ package io.homeassistant.companion.android.complication
 
 import android.content.ComponentName
 import android.util.Log
-import androidx.wear.watchface.complications.data.ComplicationData
-import androidx.wear.watchface.complications.data.ComplicationType
-import androidx.wear.watchface.complications.data.LongTextComplicationData
-import androidx.wear.watchface.complications.data.PlainComplicationText
-import androidx.wear.watchface.complications.data.RangedValueComplicationData
-import androidx.wear.watchface.complications.data.ShortTextComplicationData
-import androidx.wear.watchface.complications.datasource.ComplicationRequest
-import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import androidx.wear.complications.data.ComplicationData
+import androidx.wear.complications.data.ComplicationText
+import androidx.wear.complications.data.ComplicationType
+import androidx.wear.complications.data.LongTextComplicationData
+import androidx.wear.complications.data.PlainComplicationText
+import androidx.wear.complications.data.ShortTextComplicationData
+import androidx.wear.complications.data.RangedValueComplicationData
+import androidx.wear.complications.datasource.ComplicationDataSourceService
+import androidx.wear.complications.datasource.ComplicationDataSourceUpdateRequester
+import androidx.wear.complications.datasource.ComplicationRequest
 import com.google.common.util.concurrent.ListenableFuture
 import dagger.hilt.android.AndroidEntryPoint
 import io.homeassistant.companion.android.R
@@ -46,7 +48,7 @@ import java.util.Locale
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
 
-class AndroidComplicationProviderService : SuspendingComplicationDataSourceService() {
+class AndroidComplicationProviderService : ComplicationDataSourceService() {
 
     /*
      * Called when a complication has been activated. The method is for any one-time
