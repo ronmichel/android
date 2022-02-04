@@ -39,6 +39,7 @@ import java.util.Locale
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
 
+@AndroidEntryPoint
 class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceService() {
     
     lateinit var integrationUseCase: IntegrationRepository
