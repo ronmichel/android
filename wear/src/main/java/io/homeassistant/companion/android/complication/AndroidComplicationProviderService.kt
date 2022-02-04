@@ -46,7 +46,7 @@ import java.util.Locale
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
 
-class AndroidComplicationProviderService : ComplicationDataSourceService() {
+class AndroidComplicationProviderService : SuspendingComplicationDataSourceService() {
 
     /*
      * Called when a complication has been activated. The method is for any one-time
