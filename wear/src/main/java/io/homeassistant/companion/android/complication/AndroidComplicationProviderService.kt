@@ -17,25 +17,14 @@ package io.homeassistant.companion.android.complication
 
 import android.content.ComponentName
 import android.util.Log
-import android.support.wearable.complications.*
-import androidx.wear.complications.data.ComplicationData
-import androidx.wear.complications.data.ComplicationText
-import androidx.wear.complications.data.ComplicationType
-import androidx.wear.complications.data.LongTextComplicationData
-import androidx.wear.complications.data.PlainComplicationText
-import androidx.wear.complications.data.ShortTextComplicationData
-import androidx.wear.complications.data.RangedValueComplicationData
-import androidx.wear.complications.datasource.ComplicationDataSourceService
-import androidx.wear.complications.datasource.ComplicationDataSourceUpdateRequester
-import androidx.wear.complications.datasource.ComplicationRequest
-import io.homeassistant.companion.android.R
-import io.homeassistant.companion.android.common.data.integration.IntegrationRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.guava.future
-import javax.inject.Inject
-import io.homeassistant.companion.android.common.R as commonR
+import androidx.wear.watchface.complications.data.ComplicationData
+import androidx.wear.watchface.complications.data.ComplicationType
+import androidx.wear.watchface.complications.data.LongTextComplicationData
+import androidx.wear.watchface.complications.data.PlainComplicationText
+import androidx.wear.watchface.complications.data.RangedValueComplicationData
+import androidx.wear.watchface.complications.data.ShortTextComplicationData
+import androidx.wear.watchface.complications.datasource.ComplicationRequest
+import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
@@ -46,8 +35,7 @@ import java.util.Locale
  * Note: This class uses the suspending variation of complication data source service to support
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
-
-class AndroidComplicationProviderService : ComplicationDataSourceService() {
+class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceService() {
 
     /*
      * Called when a complication has been activated. The method is for any one-time
