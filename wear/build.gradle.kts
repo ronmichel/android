@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "io.homeassistant.companion.android"
-        minSdk = 25
+        minSdk = 26
         targetSdk = 30
 
         versionName = System.getenv("VERSION") ?: "LOCAL"
