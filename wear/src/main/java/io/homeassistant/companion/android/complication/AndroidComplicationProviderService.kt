@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package package io.homeassistant.companion.android.complication
+package io.homeassistant.companion.android.complication
 
 import android.content.ComponentName
 import android.util.Log
