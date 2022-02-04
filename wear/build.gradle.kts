@@ -121,5 +121,5 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-android")
     implementation("androidx.wear.tiles:tiles:1.0.0")
     
-    implementation "androidx.wear.watchface:watchface-complications-data-source-ktx:1.1.0-alpha02"
+    implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.1.0-alpha02")
 }
