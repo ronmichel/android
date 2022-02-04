@@ -92,7 +92,7 @@ dependencies {
     implementation("com.google.android.material:material:1.5.0")
 
     implementation("androidx.wear:wear:1.2.0")
-    implementation("com.google.android.support:wearable:2.8.1")
+
     implementation("com.google.android.gms:play-services-wearable:17.1.0")
     implementation("androidx.wear:wear-input:1.2.0-alpha02")
     implementation("androidx.wear:wear-remote-interactions:1.0.0")
