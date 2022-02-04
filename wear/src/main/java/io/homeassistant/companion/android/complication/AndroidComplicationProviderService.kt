@@ -28,8 +28,6 @@ import androidx.wear.complications.data.RangedValueComplicationData
 import androidx.wear.complications.datasource.ComplicationDataSourceService
 import androidx.wear.complications.datasource.ComplicationDataSourceUpdateRequester
 import androidx.wear.complications.datasource.ComplicationRequest
-import com.google.common.util.concurrent.ListenableFuture
-import dagger.hilt.android.AndroidEntryPoint
 import io.homeassistant.companion.android.R
 import io.homeassistant.companion.android.common.data.integration.IntegrationRepository
 import kotlinx.coroutines.CoroutineScope
