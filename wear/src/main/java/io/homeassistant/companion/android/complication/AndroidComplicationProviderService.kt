@@ -31,6 +31,7 @@ import io.homeassistant.companion.android.common.data.integration.IntegrationRep
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
+import javax.inject.Inject
 
 /**
  * Example watch face complication data source provides a number that can be incremented on tap.
