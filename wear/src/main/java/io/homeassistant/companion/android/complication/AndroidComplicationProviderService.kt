@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
 import javax.inject.Inject
+import io.homeassistant.companion.android.common.R as commonR
 
 /**
  * Example watch face complication data source provides a number that can be incremented on tap.
@@ -89,7 +90,12 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
      */
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
-
+            val template = integrationUseCase.getTemplateTileContent()
+            val renderedText = try {
+                integrationUseCase.renderTemplate(template, mapOf())
+            } catch (e: Exception) {
+                getString(commonR.string.template_tile_error)
+            }
         return null
     }
 
