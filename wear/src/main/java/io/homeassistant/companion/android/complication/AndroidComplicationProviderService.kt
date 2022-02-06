@@ -122,7 +122,7 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
                 if (Log.isLoggable(TAG, Log.WARN)) {
                     Log.w(TAG, "Unexpected complication type ${request.complicationType}")
                 }
-                "fufu"
+                null
             }
         }        
     }
