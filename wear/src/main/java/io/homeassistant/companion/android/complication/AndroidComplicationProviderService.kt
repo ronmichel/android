@@ -108,7 +108,33 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
 
         val numberText = String.format(Locale.getDefault(), "%d!", number)
         val testText = "lala"
-        return null
+        return when (request.complicationType) {
+
+            ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(text = testText).build(),
+                contentDescription = PlainComplicationText
+                    .Builder(text = "Short Text version of Number.").build()
+            )
+                .setTapAction(complicationPendingIntent)
+                .build()
+
+            ComplicationType.LONG_TEXT -> LongTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(text = "Number: $testText").build(),
+                contentDescription = PlainComplicationText
+                    .Builder(text = "Long Text version of Number.").build()
+            )
+                .setTapAction(complicationPendingIntent)
+                .build()
+
+         
+
+            else -> {
+                if (Log.isLoggable(TAG, Log.WARN)) {
+                    Log.w(TAG, "Unexpected complication type ${request.complicationType}")
+                }
+                null
+            }
+        }
 /*    
         return when (request.complicationType) {
 
