@@ -108,7 +108,8 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
 
         val numberText = String.format(Locale.getDefault(), "%d!", number)
         val testText = "lala"
-    
+        return null
+/*    
         return when (request.complicationType) {
 
             ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
@@ -124,7 +125,7 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
                 }
                 null
             }
-        }        
+        }  */      
     }
 
     /*
