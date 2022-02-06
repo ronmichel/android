@@ -76,7 +76,9 @@
                 android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
                 android:value="600" />
         </service>
-        
+
+        <receiver android:name=".ComplicationTapBroadcastReceiver" />
+
         <!-- Tiles -->
         <service
             android:name=".tiles.ShortcutsTile"
