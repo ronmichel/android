@@ -62,7 +62,12 @@ class ComplicationTapBroadcastReceiver : BroadcastReceiver() {
                 // Request an update for the complication that has just been tapped, that is,
                 // the system call onComplicationUpdate on the specified complication data
                 // source.
-
+                val complicationDataSourceUpdateRequester =
+                    ComplicationDataSourceUpdateRequester.create(
+                        context = context,
+                        complicationDataSourceComponent = dataSource
+                    )
+                complicationDataSourceUpdateRequester.requestUpdate(complicationId)
             } finally {
                 // Always call finish, even if cancelled
                 result.finish()
