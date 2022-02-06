@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.wearable.complicationsdatasource
+package io.homeassistant.companion.android.complication
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -22,8 +22,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.datastore.preferences.core.edit
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
-import com.example.android.wearable.complicationsdatasource.data.TAP_COUNTER_PREF_KEY
-import com.example.android.wearable.complicationsdatasource.data.dataStore
+import io.homeassistant.companion.android.complication.data.TAP_COUNTER_PREF_KEY
+import io.homeassistant.companion.android.complication.data.dataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
