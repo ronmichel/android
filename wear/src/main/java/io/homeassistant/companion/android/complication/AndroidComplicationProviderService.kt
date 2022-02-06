@@ -28,6 +28,8 @@ import androidx.wear.watchface.complications.datasource.SuspendingComplicationDa
 import dagger.hilt.android.AndroidEntryPoint
 import io.homeassistant.companion.android.R
 import io.homeassistant.companion.android.common.data.integration.IntegrationRepository
+import io.homeassistant.companion.android.complication.data.TAP_COUNTER_PREF_KEY
+import io.homeassistant.companion.android.complication.data.dataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
