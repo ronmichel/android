@@ -36,18 +36,16 @@ import java.util.Locale
 import javax.inject.Inject
 import io.homeassistant.companion.android.common.R as commonR
 
+
+ 
+
 /**
  * Example watch face complication data source provides a number that can be incremented on tap.
  *
  * Note: This class uses the suspending variation of complication data source service to support
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
-
-@AndroidEntryPoint
-class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceService() {
-    
-    @Inject
-    lateinit var integrationUseCase: IntegrationRepository
+class CustomComplicationDataSourceService : SuspendingComplicationDataSourceService() {
 
     /*
      * Called when a complication has been activated. The method is for any one-time
@@ -92,26 +90,30 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
      */
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
-        val template = integrationUseCase.getTemplateTileContent()
-        val renderedText = try {
-            integrationUseCase.renderTemplate(template, mapOf())
-        } catch (e: Exception) {
-            getString(commonR.string.template_tile_error)
-        }
+
+        // Create Tap Action so that the user can trigger an update by tapping the complication.
+        val thisDataSource = ComponentName(this, javaClass)
+        // We pass the complication id, so we can only update the specific complication tapped.
+        val complicationPendingIntent =
+            ComplicationTapBroadcastReceiver.getToggleIntent(
+                this,
+                thisDataSource,
+                request.complicationInstanceId
+            )
+
         // Retrieves your data, in this case, we grab an incrementing number from Datastore.
         val number: Int = applicationContext.dataStore.data
             .map { preferences ->
                 preferences[TAP_COUNTER_PREF_KEY] ?: 0
             }
-        .first()
-        
+            .first()
 
         val numberText = String.format(Locale.getDefault(), "%d!", number)
-        val testText = "lala"
+
         return when (request.complicationType) {
 
             ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
-                text = PlainComplicationText.Builder(text = testText).build(),
+                text = PlainComplicationText.Builder(text = numberText).build(),
                 contentDescription = PlainComplicationText
                     .Builder(text = "Short Text version of Number.").build()
             )
@@ -119,14 +121,23 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
                 .build()
 
             ComplicationType.LONG_TEXT -> LongTextComplicationData.Builder(
-                text = PlainComplicationText.Builder(text = "Number: $testText").build(),
+                text = PlainComplicationText.Builder(text = "Number: $numberText").build(),
                 contentDescription = PlainComplicationText
                     .Builder(text = "Long Text version of Number.").build()
             )
                 .setTapAction(complicationPendingIntent)
                 .build()
 
-         
+            ComplicationType.RANGED_VALUE -> RangedValueComplicationData.Builder(
+                value = number.toFloat(),
+                min = 0f,
+                max = ComplicationTapBroadcastReceiver.MAX_NUMBER.toFloat(),
+                contentDescription = PlainComplicationText
+                    .Builder(text = "Ranged Value version of Number.").build()
+            )
+                .setText(PlainComplicationText.Builder(text = numberText).build())
+                .setTapAction(complicationPendingIntent)
+                .build()
 
             else -> {
                 if (Log.isLoggable(TAG, Log.WARN)) {
@@ -135,23 +146,6 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
                 null
             }
         }
-/*    
-        return when (request.complicationType) {
-
-            ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
-                text = PlainComplicationText.Builder(text = testText).build(),
-                contentDescription = PlainComplicationText
-                    .Builder(text = "Short Text version of Number.").build()
-            )
-                .build()
-
-            else -> {
-                if (Log.isLoggable(TAG, Log.WARN)) {
-                    Log.w(TAG, "Unexpected complication type ${request.complicationType}")
-                }
-                null
-            }
-        }  */      
     }
 
     /*
@@ -165,3 +159,5 @@ class AndroidComplicationDataSourceService : SuspendingComplicationDataSourceSer
         private const val TAG = "CompDataSourceService"
     }
 }
+
+
