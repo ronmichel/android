@@ -25,19 +25,11 @@ import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
-import dagger.hilt.android.AndroidEntryPoint
-import io.homeassistant.companion.android.R
-import io.homeassistant.companion.android.common.data.integration.IntegrationRepository
 import io.homeassistant.companion.android.complication.data.TAP_COUNTER_PREF_KEY
 import io.homeassistant.companion.android.complication.data.dataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
-import javax.inject.Inject
-import io.homeassistant.companion.android.common.R as commonR
-
-
- 
 
 /**
  * Example watch face complication data source provides a number that can be incremented on tap.
@@ -159,5 +151,3 @@ class CustomComplicationDataSourceService : SuspendingComplicationDataSourceServ
         private const val TAG = "CompDataSourceService"
     }
 }
-
-
