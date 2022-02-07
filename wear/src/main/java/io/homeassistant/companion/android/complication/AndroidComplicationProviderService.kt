@@ -81,7 +81,12 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
 
-        return null
+        return ShortTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(text = "lala").build(),
+            contentDescription = PlainComplicationText.Builder(text = "Short Text version of Number.").build()
+        )
+            .setTapAction(null)
+            .build()
     }
 
     /*
