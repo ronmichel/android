@@ -25,11 +25,13 @@ import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import dagger.hilt.android.AndroidEntryPoint
 import io.homeassistant.companion.android.R
 import io.homeassistant.companion.android.common.data.integration.IntegrationRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
+import javax.inject.Inject
 import io.homeassistant.companion.android.common.R as commonR
 
 /**
@@ -38,8 +40,11 @@ import io.homeassistant.companion.android.common.R as commonR
  * Note: This class uses the suspending variation of complication data source service to support
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
+@AndroidEntryPoint
 class AndroidComplicationProviderService : SuspendingComplicationDataSourceService() {
-
+    
+    @Inject
+    lateinit var integrationUseCase: IntegrationRepository
     /*
      * Called when a complication has been activated. The method is for any one-time
      * (per complication) set-up.
