@@ -83,61 +83,7 @@ class CustomComplicationDataSourceService : SuspendingComplicationDataSourceServ
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
 
-        // Create Tap Action so that the user can trigger an update by tapping the complication.
-        val thisDataSource = ComponentName(this, javaClass)
-        // We pass the complication id, so we can only update the specific complication tapped.
-        val complicationPendingIntent =
-            ComplicationTapBroadcastReceiver.getToggleIntent(
-                this,
-                thisDataSource,
-                request.complicationInstanceId
-            )
-
-        // Retrieves your data, in this case, we grab an incrementing number from Datastore.
-        val number: Int = applicationContext.dataStore.data
-            .map { preferences ->
-                preferences[TAP_COUNTER_PREF_KEY] ?: 0
-            }
-            .first()
-
-        val numberText = String.format(Locale.getDefault(), "%d!", number)
-
-        return when (request.complicationType) {
-
-            ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
-                text = PlainComplicationText.Builder(text = numberText).build(),
-                contentDescription = PlainComplicationText
-                    .Builder(text = "Short Text version of Number.").build()
-            )
-                .setTapAction(complicationPendingIntent)
-                .build()
-
-            ComplicationType.LONG_TEXT -> LongTextComplicationData.Builder(
-                text = PlainComplicationText.Builder(text = "Number: $numberText").build(),
-                contentDescription = PlainComplicationText
-                    .Builder(text = "Long Text version of Number.").build()
-            )
-                .setTapAction(complicationPendingIntent)
-                .build()
-
-            ComplicationType.RANGED_VALUE -> RangedValueComplicationData.Builder(
-                value = number.toFloat(),
-                min = 0f,
-                max = ComplicationTapBroadcastReceiver.MAX_NUMBER.toFloat(),
-                contentDescription = PlainComplicationText
-                    .Builder(text = "Ranged Value version of Number.").build()
-            )
-                .setText(PlainComplicationText.Builder(text = numberText).build())
-                .setTapAction(complicationPendingIntent)
-                .build()
-
-            else -> {
-                if (Log.isLoggable(TAG, Log.WARN)) {
-                    Log.w(TAG, "Unexpected complication type ${request.complicationType}")
-                }
-                null
-            }
-        }
+      return null
     }
 
     /*
