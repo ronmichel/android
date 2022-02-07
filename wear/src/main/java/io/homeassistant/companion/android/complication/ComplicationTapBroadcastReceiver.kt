@@ -77,9 +77,9 @@ class ComplicationTapBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         private const val EXTRA_DATA_SOURCE_COMPONENT =
-            "com.example.android.wearable.complicationsdatasource.action.DATA_SOURCE_COMPONENT"
+            "io.homeassistant.companion.android.complication.action.DATA_SOURCE_COMPONENT"
         private const val EXTRA_COMPLICATION_ID =
-            "com.example.android.wearable.complicationsdatasource.action.COMPLICATION_ID"
+            "io.homeassistant.companion.android.complication.action.COMPLICATION_ID"
         const val MAX_NUMBER = 20
 
         /**
