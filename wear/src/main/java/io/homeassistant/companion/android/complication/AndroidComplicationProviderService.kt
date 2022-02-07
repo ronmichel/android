@@ -35,7 +35,7 @@ import java.util.Locale
  * Note: This class uses the suspending variation of complication data source service to support
  * async calls to the data layer, that is, to the DataStore saving the persistent values.
  */
-class CustomComplicationDataSourceService : SuspendingComplicationDataSourceService() {
+class AndroidComplicationProviderService : SuspendingComplicationDataSourceService() {
 
     /*
      * Called when a complication has been activated. The method is for any one-time
@@ -81,12 +81,7 @@ class CustomComplicationDataSourceService : SuspendingComplicationDataSourceServ
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
 
-        return ShortTextComplicationData.Builder(
-            text = PlainComplicationText.Builder(text = "6!").build(),
-            contentDescription = PlainComplicationText.Builder(text = "Short Text version of Number.").build()
-        )
-            .setTapAction(null)
-            .build()
+        return null
     }
 
     /*
