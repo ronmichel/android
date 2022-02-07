@@ -25,9 +25,12 @@ import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import io.homeassistant.companion.android.R
+import io.homeassistant.companion.android.common.data.integration.IntegrationRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
+import io.homeassistant.companion.android.common.R as commonR
 
 /**
  * Example watch face complication data source provides a number that can be incremented on tap.
@@ -80,10 +83,16 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
      */
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
-
+        
+        val template = integrationUseCase.getTemplateTileContent()
+        val renderedText = try {
+            integrationUseCase.renderTemplate(template, mapOf())
+        } catch (e: Exception) {
+                "error"
+        }
         return ShortTextComplicationData.Builder(
-            text = PlainComplicationText.Builder(text = "lala").build(),
-            contentDescription = PlainComplicationText.Builder(text = "Short Text version of Number.").build()
+            text = PlainComplicationText.Builder(text = renderedText).build(),
+            contentDescription = PlainComplicationText.Builder(text = "Rendered Template.").build()
         )
             .setTapAction(null)
             .build()
