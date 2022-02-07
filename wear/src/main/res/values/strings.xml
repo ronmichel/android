@@ -15,4 +15,5 @@
 -->
 <resources>
     <string name="complications_data_sources_service_label">Complication Data Sources Service</string>
+    <string name="template_comp">Templ. complication</string>
 </resources>
