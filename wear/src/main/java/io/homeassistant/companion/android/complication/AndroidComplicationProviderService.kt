@@ -25,8 +25,6 @@ import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
-import io.homeassistant.companion.android.complication.data.TAP_COUNTER_PREF_KEY
-import io.homeassistant.companion.android.complication.data.dataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
@@ -83,7 +81,12 @@ class CustomComplicationDataSourceService : SuspendingComplicationDataSourceServ
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
 
-      return null
+        return ShortTextComplicationData.Builder(
+            text = PlainComplicationText.Builder(text = "6!").build(),
+            contentDescription = PlainComplicationText.Builder(text = "Short Text version of Number.").build()
+        )
+            .setTapAction(null)
+            .build()
     }
 
     /*
