@@ -95,14 +95,33 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
         } catch (e: Exception) {
                 "error"
         }
-        return ShortTextComplicationData.Builder(
-            text = PlainComplicationText.Builder(text = renderedText).build(),
-            contentDescription = PlainComplicationText.Builder(text = "Rendered Template.").build()
-        )
-            .setTapAction(null)
-            .build()
-    }
 
+        return when (request.complicationType) {
+
+            ComplicationType.SHORT_TEXT -> ShortTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(text = renderedText).build(),
+                contentDescription = PlainComplicationText
+                    .Builder(text = "Rendered Template.").build()
+            )
+                .setTapAction(complicationPendingIntent)
+                .build()
+
+            ComplicationType.LONG_TEXT -> LongTextComplicationData.Builder(
+                text = PlainComplicationText.Builder(text = renderedText).build(),
+                contentDescription = PlainComplicationText
+                    .Builder(text = "Rendered Template.").build()
+            )
+                .setTapAction(complicationPendingIntent)
+                .build()
+                
+            else -> {
+                if (Log.isLoggable(TAG, Log.WARN)) {
+                    Log.w(TAG, "Unexpected complication type ${request.complicationType}")
+                }
+                null
+            }
+        }
+    }
     /*
      * Called when the complication has been deactivated.
      */
