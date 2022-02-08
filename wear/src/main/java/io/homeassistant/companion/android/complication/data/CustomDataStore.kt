@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.homeassistant.companion.android.complication
+package io.homeassistant.companion.android.complication.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
