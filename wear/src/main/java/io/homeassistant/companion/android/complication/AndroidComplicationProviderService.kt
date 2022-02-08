@@ -88,7 +88,16 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
      */
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         Log.d(TAG, "onComplicationRequest() id: ${request.complicationInstanceId}")
-        
+     
+        val thisDataSource = ComponentName(this, javaClass)
+        // We pass the complication id, so we can only update the specific complication tapped.
+        val complicationPendingIntent =
+            ComplicationTapBroadcastReceiver.getToggleIntent(
+                this,
+                thisDataSource,
+                request.complicationInstanceId
+            )     
+     
         val template = integrationUseCase.getTemplateTileContent()
         val renderedText = try {
             integrationUseCase.renderTemplate(template, mapOf())
