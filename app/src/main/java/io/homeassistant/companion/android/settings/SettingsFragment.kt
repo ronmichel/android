@@ -14,6 +14,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import android.text.InputType
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.biometric.BiometricManager
@@ -37,6 +38,7 @@ import io.homeassistant.companion.android.settings.language.LanguagesProvider
 import io.homeassistant.companion.android.settings.log.LogFragment
 import io.homeassistant.companion.android.settings.notification.NotificationHistoryFragment
 import io.homeassistant.companion.android.settings.qs.ManageTilesFragment
+import io.homeassistant.companion.android.settings.sensor.SensorUpdateFrequencyFragment
 import io.homeassistant.companion.android.settings.shortcuts.ManageShortcutsSettingsFragment
 import io.homeassistant.companion.android.settings.ssid.SsidDialogFragment
 import io.homeassistant.companion.android.settings.ssid.SsidPreference
@@ -66,6 +68,10 @@ class SettingsFragment constructor(
 
     private lateinit var authenticator: Authenticator
     private var setLock = false
+
+    private val requestBackgroundAccessResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        updateBackgroundAccessPref()
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         presenter.init(this)
@@ -145,6 +151,16 @@ class SettingsFragment constructor(
                 .addToBackStack(getString(commonR.string.sensors))
                 .commit()
             return@setOnPreferenceClickListener true
+        }
+        findPreference<Preference>("sensor_update_frequency")?.let {
+            it.setOnPreferenceClickListener {
+                parentFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content, SensorUpdateFrequencyFragment::class.java, null)
+                    .addToBackStack(getString(commonR.string.sensor_update_frequency))
+                    .commit()
+                return@setOnPreferenceClickListener true
+            }
         }
 
         findPreference<PreferenceCategory>("widgets")?.isVisible = Build.MODEL != "Quest"
@@ -451,13 +467,13 @@ class SettingsFragment constructor(
 
     @SuppressLint("BatteryLife")
     private fun requestBackgroundAccess() {
-        val intent: Intent
         if (!isIgnoringBatteryOptimizations()) {
-            intent = Intent(
-                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                Uri.parse("package:${activity?.packageName}")
+            requestBackgroundAccessResult.launch(
+                Intent(
+                    Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                    Uri.parse("package:${activity?.packageName}")
+                )
             )
-            startActivityForResult(intent, 0)
         }
     }
 
@@ -512,7 +528,6 @@ class SettingsFragment constructor(
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        updateBackgroundAccessPref()
 
         val isGreaterR = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
