@@ -77,6 +77,12 @@
                 android:value="60" />
         </service>
         <receiver android:name=".complication.ComplicationTapBroadcastReceiver" />
+        <receiver android:name=".complication.BaseComplicationProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="io.homeassistant.companion.android.complication.BaseComplicationProvider.RECEIVE_DATA" />
+            </intent-filter>
+        </receiver>
 
         <!-- Tiles -->
         <service
