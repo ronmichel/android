@@ -20,9 +20,9 @@ abstract class BaseComplicationProvider : AppWidgetProvider() {
 
     companion object {
         const val UPDATE_VIEW =
-            "io.homeassistant.companion.android.widgets.template.BaseWidgetProvider.UPDATE_VIEW"
+            "io.homeassistant.companion.android.complication.UPDATE_VIEW"
         const val RECEIVE_DATA =
-            "io.homeassistant.companion.android.widgets.template.TemplateWidget.RECEIVE_DATA"
+            "io.homeassistant.companion.android.complication.RECEIVE_DATA"
     }
 
     private var entityUpdates: Flow<Entity<*>>? = null
