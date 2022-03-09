@@ -31,18 +31,6 @@ import io.homeassistant.companion.android.common.data.integration.IntegrationRep
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Locale
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.widget.RemoteViews
-import io.homeassistant.companion.android.common.data.integration.Entity
-import io.homeassistant.companion.android.common.data.integration.IntegrationRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import io.homeassistant.companion.android.common.R as commonR
 
@@ -55,85 +43,8 @@ import io.homeassistant.companion.android.common.R as commonR
 @AndroidEntryPoint
 class AndroidComplicationProviderService : SuspendingComplicationDataSourceService() {
     
-    companion object {
-        const val UPDATE_VIEW =
-            "io.homeassistant.companion.android.widgets.template.BaseWidgetProvider.UPDATE_VIEW"
-        const val RECEIVE_DATA =
-            "io.homeassistant.companion.android.widgets.template.TemplateWidget.RECEIVE_DATA"
-    }
-    
-    private var entityUpdates: Flow<Entity<*>>? = null
-    
     @Inject
     lateinit var integrationUseCase: IntegrationRepository
-    protected var mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main + Job())
-    protected var lastIntent = ""
- 
-    
-//from widget: needs to be adapted to complication:    
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        // There may be multiple widgets active, so update all of them
-        for (appWidgetId in appWidgetIds) {
-            mainScope.launch {
-                val views = getWidgetRemoteViews(context, appWidgetId)
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            }
-        }
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        lastIntent = intent.action.toString()
-        val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1)
-
-        super.onReceive(context, intent)
-        when (lastIntent) {
-            UPDATE_VIEW -> updateView(context, appWidgetId)
-            RECEIVE_DATA -> {
-                saveEntityConfiguration(
-                    context,
-                    intent.extras,
-                    appWidgetId
-                )
-                onScreenOn(context)
-            }
-            Intent.ACTION_SCREEN_ON -> onScreenOn(context)
-            Intent.ACTION_SCREEN_OFF -> onScreenOff()
-        }
-    }
-
-    fun onScreenOn(context: Context) {
-        mainScope = CoroutineScope(Dispatchers.Main + Job())
-        if (entityUpdates == null) {
-            mainScope.launch {
-                if (!integrationUseCase.isRegistered()) {
-                    return@launch
-                }
-                updateAllWidgets(context)
-                if (getAllWidgetIds(context).isNotEmpty()) {
-                    entityUpdates = integrationUseCase.getEntityUpdates()
-                    entityUpdates?.collect {
-                        onEntityStateChanged(context, it)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun onScreenOff() {
-        mainScope.cancel()
-        entityUpdates = null
-    }
-    
-    
-    
- //end widget  
- 
- 
- 
     /*
      * Called when a complication has been activated. The method is for any one-time
      * (per complication) set-up.
