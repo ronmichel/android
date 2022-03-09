@@ -43,8 +43,11 @@ import io.homeassistant.companion.android.common.R as commonR
 @AndroidEntryPoint
 class AndroidComplicationProviderService : SuspendingComplicationDataSourceService() {
     
+    private var entityUpdates: Flow<Entity<*>>? = null
+    
     @Inject
     lateinit var integrationUseCase: IntegrationRepository
+    protected var mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main + Job())
     /*
      * Called when a complication has been activated. The method is for any one-time
      * (per complication) set-up.
@@ -57,6 +60,20 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
         type: ComplicationType
     ) {
         Log.d(TAG, "onComplicationActivated(): $complicationInstanceId")
+        
+        mainScope = CoroutineScope(Dispatchers.Main + Job())
+        if (entityUpdates == null) {
+            mainScope.launch {
+                if (!integrationUseCase.isRegistered()) {
+                    return@launch
+                }
+
+                entityUpdates = integrationUseCase.getEntityUpdates()
+                entityUpdates?.collect {
+                    updaterequest(complicationInstanceId, it)
+                }            
+            }
+        }
     }
 
     /*
@@ -136,8 +153,14 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
      */
     override fun onComplicationDeactivated(complicationInstanceId: Int) {
         Log.d(TAG, "onComplicationDeactivated(): $complicationInstanceId")
+        
+        mainScope.cancel()
+        entityUpdates = null
     }
-
+    
+    private fun updaterequest(complicationInstanceId: Int) {
+        mimi = 1
+    }
     companion object {
         private const val TAG = "CompDataSourceService"
     }
