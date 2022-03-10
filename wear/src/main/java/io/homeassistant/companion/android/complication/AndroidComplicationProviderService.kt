@@ -166,15 +166,7 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
     }
     
     private fun updaterequest(complicationInstanceId: Int) {
-        val thisDataSource = ComponentName(this, javaClass)
-        // We pass the complication id, so we can only update the specific complication tapped.
-        val complicationPendingIntent =
-            ComplicationTapBroadcastReceiver.getToggleIntent(
-                this,
-                thisDataSource,
-                request.complicationInstanceId
-            )
-        return complicationPendingIntent
+        Log.w(TAG, "Update requested with a flow ${complicationInstanceId}")
     }
     companion object {
         private const val TAG = "CompDataSourceService"
