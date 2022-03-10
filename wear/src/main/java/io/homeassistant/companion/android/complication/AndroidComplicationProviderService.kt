@@ -68,6 +68,15 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
     ) {
         Log.d(TAG, "onComplicationActivated(): $complicationInstanceId")
         
+        val thisDataSource = ComponentName(this, javaClass)
+        // We pass the complication id, so we can only update the specific complication tapped.
+        val complicationPendingIntent =
+            ComplicationTapBroadcastReceiver.getToggleIntent(
+                this,
+                thisDataSource,
+                complicationInstanceId
+            ) 
+        
         mainScope = CoroutineScope(Dispatchers.Main + Job())
         if (entityUpdates == null) {
             mainScope.launch {
