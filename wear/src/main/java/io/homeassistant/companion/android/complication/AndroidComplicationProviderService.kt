@@ -77,7 +77,7 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
 
                 entityUpdates = integrationUseCase.getEntityUpdates()
                 entityUpdates?.collect {
-                    updaterequest(complicationInstanceId, it)
+                    
                 }            
             }
         }
