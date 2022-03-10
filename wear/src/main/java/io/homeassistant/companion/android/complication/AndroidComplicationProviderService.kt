@@ -87,6 +87,7 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
                 entityUpdates = integrationUseCase.getEntityUpdates()
                 entityUpdates?.collect {
                     Log.w(TAG, "Update requested with a flow ${complicationInstanceId}")
+                    complicationPendingIntent
                 }            
             }
         }
