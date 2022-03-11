@@ -25,6 +25,7 @@ import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import dagger.hilt.android.AndroidEntryPoint
 import io.homeassistant.companion.android.R
 import io.homeassistant.companion.android.common.data.integration.Entity
@@ -88,7 +89,12 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
                 entityUpdates?.collect {
                      if (it.entityId == "light.philips_eyecare") {
                         Log.w(TAG, "Philips light changes! Update that fcking compl.")
-                        complicationPendingIntent
+                        val complicationDataSourceUpdateRequester =
+                            ComplicationDataSourceUpdateRequester.create(
+                                context = this,
+                                complicationDataSourceComponent = thisdataSource
+                            )
+                        complicationDataSourceUpdateRequester.requestUpdate(complicationInstanceId)
                      }
                 }            
             }
