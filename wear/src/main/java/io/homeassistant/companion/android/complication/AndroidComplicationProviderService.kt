@@ -92,7 +92,7 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
                         val complicationDataSourceUpdateRequester =
                             ComplicationDataSourceUpdateRequester.create(
                                 context = this,
-                                complicationDataSourceComponent = thisdataSource
+                                complicationDataSourceComponent = thisDataSource
                             )
                         complicationDataSourceUpdateRequester.requestUpdate(complicationInstanceId)
                      }
