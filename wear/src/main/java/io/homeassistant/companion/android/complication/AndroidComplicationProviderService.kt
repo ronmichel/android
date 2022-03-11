@@ -86,8 +86,10 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
 
                 entityUpdates = integrationUseCase.getEntityUpdates()
                 entityUpdates?.collect {
-                    Log.w(TAG, "Update requested with a flow ${it.entityId}")
-                   // complicationPendingIntent
+                     if (it.entityId == light.philips_eyecare) {
+                        Log.w(TAG, "Philips light changes! Update that fcking compl.")
+                        // complicationPendingIntent
+                     }
                 }            
             }
         }
