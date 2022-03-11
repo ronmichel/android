@@ -88,7 +88,7 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
                 entityUpdates?.collect {
                      if (it.entityId == light.philips_eyecare) {
                         Log.w(TAG, "Philips light changes! Update that fcking compl.")
-                        // complicationPendingIntent
+                        complicationPendingIntent
                      }
                 }            
             }
