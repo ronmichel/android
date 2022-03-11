@@ -77,7 +77,7 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
                 thisDataSource,
                 complicationInstanceId
             ) 
-        
+        val context = this
         mainScope = CoroutineScope(Dispatchers.Main + Job())
         if (entityUpdates == null) {
             mainScope.launch {
@@ -91,7 +91,7 @@ class AndroidComplicationProviderService : SuspendingComplicationDataSourceServi
                         Log.w(TAG, "Philips light changes! Update that fcking compl.")
                         val complicationDataSourceUpdateRequester =
                             ComplicationDataSourceUpdateRequester.create(
-                                context = this,
+                                context = context,
                                 complicationDataSourceComponent = thisDataSource
                             )
                         complicationDataSourceUpdateRequester.requestUpdate(complicationInstanceId)
