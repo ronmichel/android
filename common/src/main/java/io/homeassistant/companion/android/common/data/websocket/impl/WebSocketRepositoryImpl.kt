@@ -69,7 +69,7 @@ class WebSocketRepositoryImpl @Inject constructor(
         private const val EVENT_AREA_REGISTRY_UPDATED = "area_registry_updated"
         private const val EVENT_DEVICE_REGISTRY_UPDATED = "device_registry_updated"
         private const val EVENT_ENTITY_REGISTRY_UPDATED = "entity_registry_updated"
-
+        private const val EVENT_COMPLICATION_UPDATE_REQUEST = "complication_update"
         private const val DISCONNECT_DELAY = 10000L
     }
 
@@ -351,7 +351,7 @@ class WebSocketRepositoryImpl @Inject constructor(
         if (eventResponseType != null && eventResponseType.isTextual) {
             val eventResponseClass = when (eventResponseType.textValue()) {
                 EVENT_STATE_CHANGED -> {
-                    val entitid = response.event.get("event_data").get("entity_id")
+                    val entitid = response.event.get("data").get("entity_id")
                     Log.d(TAG, "Disit: $entitid")
                     object : TypeReference<EventResponse<StateChangedEvent>>() {}
                 }
@@ -364,6 +364,8 @@ class WebSocketRepositoryImpl @Inject constructor(
                 EVENT_ENTITY_REGISTRY_UPDATED ->
                     object :
                         TypeReference<EventResponse<EntityRegistryUpdatedEvent>>() {}
+                EVENT_COMPLICATION_UPDATE_REQUEST ->
+                    Log.d(TAG, "Complication Update Requested! miau")
                 else -> {
                     Log.d(TAG, "Unknown event type received")
                     object : TypeReference<EventResponse<Any>>() {}
