@@ -364,9 +364,10 @@ class WebSocketRepositoryImpl @Inject constructor(
                 EVENT_ENTITY_REGISTRY_UPDATED ->
                     object :
                         TypeReference<EventResponse<EntityRegistryUpdatedEvent>>() {}
-                EVENT_COMPLICATION_UPDATE_REQUEST ->
+                EVENT_COMPLICATION_UPDATE_REQUEST -> {
                     Log.d(TAG, "Complication Update Requested! miau")
                     object : TypeReference<EventResponse<Any>>() {}
+                }
                 else -> {
                     Log.d(TAG, "Unknown event type received")
                     object : TypeReference<EventResponse<Any>>() {}
