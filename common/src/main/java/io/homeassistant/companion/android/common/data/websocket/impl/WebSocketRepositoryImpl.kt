@@ -351,7 +351,7 @@ class WebSocketRepositoryImpl @Inject constructor(
         if (eventResponseType != null && eventResponseType.isTextual) {
             val eventResponseClass = when (eventResponseType.textValue()) {
                 EVENT_STATE_CHANGED -> {
-                    Log.d(TAG, "Disit: $response")
+                    Log.d(TAG, "Disit, event changd")
                     object : TypeReference<EventResponse<StateChangedEvent>>() {}
                 }
                 EVENT_AREA_REGISTRY_UPDATED ->
@@ -433,7 +433,7 @@ class WebSocketRepositoryImpl @Inject constructor(
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
-        Log.d(TAG, "Websocket: onMessage (text)")
+        // Log.d(TAG, "Websocket: onMessage (text)")
         val message: SocketResponse = mapper.readValue(text)
         Log.d(TAG, "Message number ${message.id} received: $text")
 
