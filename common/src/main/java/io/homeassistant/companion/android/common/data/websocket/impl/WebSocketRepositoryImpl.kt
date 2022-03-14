@@ -351,8 +351,9 @@ class WebSocketRepositoryImpl @Inject constructor(
         if (eventResponseType != null && eventResponseType.isTextual) {
             val eventResponseClass = when (eventResponseType.textValue()) {
                 EVENT_STATE_CHANGED -> {
-                    val entitid = response.event.get("data").get("entity_id")
-                    Log.d(TAG, "Disit: $entitid")
+                    if (response.event.get("data").get("entity_id") == "light.philips_eyecare") {
+                        Log.d(TAG, "Disit: EyeEye")
+                    }
                     object : TypeReference<EventResponse<StateChangedEvent>>() {}
                 }
                 EVENT_AREA_REGISTRY_UPDATED ->
