@@ -168,8 +168,10 @@ class WebSocketRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getStateChanges(): Flow<StateChangedEvent>? =
+    override suspend fun getStateChanges(): Flow<StateChangedEvent>? = {
         subscribeToEventsForType(EVENT_STATE_CHANGED)
+        subscribeToEventsForType(EVENT_COMPLICATION_UPDATE_REQUEST)
+    }
 
     override suspend fun getAreaRegistryUpdates(): Flow<AreaRegistryUpdatedEvent>? =
         subscribeToEventsForType(EVENT_AREA_REGISTRY_UPDATED)
