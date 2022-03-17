@@ -6,6 +6,6 @@ import android.content.Intent
 
 class WebsocketBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        WebsocketManager.start(context)
+       // WebsocketManager.start(context)
     }
 }
