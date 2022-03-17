@@ -29,9 +29,9 @@ import io.homeassistant.companion.android.common.data.websocket.WebSocketReposit
 import io.homeassistant.companion.android.common.util.websocketChannel
 import io.homeassistant.companion.android.database.AppDatabase
 import io.homeassistant.companion.android.database.settings.WebsocketSetting
-//import io.homeassistant.companion.android.notifications.MessagingManager
-import io.homeassistant.companion.android.settings.SettingsActivity
-import io.homeassistant.companion.android.webview.WebViewActivity
+// import io.homeassistant.companion.android.notifications.MessagingManager
+// import io.homeassistant.companion.android.settings.SettingsActivity
+// import io.homeassistant.companion.android.webview.WebViewActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -177,26 +177,26 @@ class WebsocketManager(
             }
         }
 
-        val intent = WebViewActivity.newInstance(applicationContext)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-        val pendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val settingIntent = SettingsActivity.newInstance(applicationContext)
-        settingIntent.putExtra("fragment", "websocket")
-        settingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        settingIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-        val settingPendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            0,
-            settingIntent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
+//        val intent = WebViewActivity.newInstance(applicationContext)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+//        val pendingIntent = PendingIntent.getActivity(
+//            applicationContext,
+//            0,
+//            intent,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
+//
+//        val settingIntent = SettingsActivity.newInstance(applicationContext)
+//        settingIntent.putExtra("fragment", "websocket")
+//        settingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        settingIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+//        val settingPendingIntent = PendingIntent.getActivity(
+//            applicationContext,
+//            0,
+//            settingIntent,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
         val notification = NotificationCompat.Builder(applicationContext, websocketChannel)
             .setSmallIcon(R.drawable.ic_stat_ic_notification)
             .setContentTitle(applicationContext.getString(R.string.websocket_listening))
