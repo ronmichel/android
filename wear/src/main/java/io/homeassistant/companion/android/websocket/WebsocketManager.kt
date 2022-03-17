@@ -48,7 +48,7 @@ class WebsocketManager(
         private const val TAG = "WebSockManager"
         private const val SOURCE = "Websocket"
         private const val NOTIFICATION_ID = 65423
-        private val DEFAULT_WEBSOCKET_SETTING = if (BuildConfig.FLAVOR == "full") WebsocketSetting.NEVER else WebsocketSetting.ALWAYS
+        private val DEFAULT_WEBSOCKET_SETTING = /* if (BuildConfig.FLAVOR == "full") WebsocketSetting.NEVER else */ WebsocketSetting.ALWAYS
 
         fun start(context: Context) {
             val websocketNotifications =
@@ -200,15 +200,15 @@ class WebsocketManager(
         val notification = NotificationCompat.Builder(applicationContext, websocketChannel)
             .setSmallIcon(R.drawable.ic_stat_ic_notification)
             .setContentTitle(applicationContext.getString(R.string.websocket_listening))
-            .setContentIntent(pendingIntent)
+//            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setGroup(websocketChannel)
-            .addAction(
-                io.homeassistant.companion.android.R.drawable.ic_websocket,
-                applicationContext.getString(R.string.settings),
-                settingPendingIntent
-            )
+//            .addAction(
+//                io.homeassistant.companion.android.R.drawable.ic_websocket,
+//                applicationContext.getString(R.string.settings),
+//                settingPendingIntent
+//            )
             .build()
         setForeground(ForegroundInfo(NOTIFICATION_ID, notification))
     }
