@@ -8,7 +8,7 @@ import android.os.PowerManager
 import dagger.hilt.android.HiltAndroidApp
 import io.homeassistant.companion.android.sensors.SensorReceiver
 import io.homeassistant.companion.android.websocket.WebsocketBroadcastReceiver
-import com.joaomgcd.common.tasker.AutoAppsThirdParty
+import io.homeassistant.companion.android.autoapps.AutoAppsThirdParty
 @HiltAndroidApp
 open class HomeAssistantApplication : Application() {
     override fun onCreate() {
