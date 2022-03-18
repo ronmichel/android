@@ -20,6 +20,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
+import io.homeassistant.companion.android.autoapps.AutoAppsThirdParty
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import io.homeassistant.companion.android.BuildConfig
@@ -58,6 +59,8 @@ class WebsocketManager(
             val workManager = WorkManager.getInstance(context)
             val workInfo = workManager.getWorkInfosForUniqueWork(TAG).get().firstOrNull()
 
+            AutoAppsThirdParty.authorize(context)
+            
             if (workInfo == null || workInfo.state.isFinished || workInfo.state == WorkInfo.State.ENQUEUED) {
                 workManager.enqueueUniquePeriodicWork(
                     TAG,
