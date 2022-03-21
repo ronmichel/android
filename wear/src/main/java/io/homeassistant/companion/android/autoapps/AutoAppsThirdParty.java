@@ -1,4 +1,4 @@
-package io.homeassistant.companion.android.autoapps;
+package com.joaomgcd.common.tasker;
 
 import android.app.PendingIntent;
 import android.content.ComponentName;
