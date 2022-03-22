@@ -123,4 +123,6 @@ dependencies {
     
     implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.1.0-alpha02")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    
+    implementation("com.joaomgcd.common.tasker")
 }
