@@ -58,7 +58,6 @@ class WebsocketManager(
             val workManager = WorkManager.getInstance(context)
             val workInfo = workManager.getWorkInfosForUniqueWork(TAG).get().firstOrNull()
 
-            AutoAppsThirdParty.authorize(context)
             
             if (workInfo == null || workInfo.state.isFinished || workInfo.state == WorkInfo.State.ENQUEUED) {
                 workManager.enqueueUniquePeriodicWork(
