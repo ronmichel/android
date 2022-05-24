@@ -105,7 +105,7 @@ class WebsocketManager(
         // Start listening for notifications
         val job = launch { collectNotifications() }
 
-        // play ping pong to ensure we have a connection.
+        // play ping-pong to ensure we have a connection.
         do {
             delay(30000)
         } while (job.isActive && isActive && shouldWeRun() && websocketRepository.sendPing())
