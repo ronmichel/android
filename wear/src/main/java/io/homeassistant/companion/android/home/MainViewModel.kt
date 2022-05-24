@@ -2,6 +2,7 @@ package io.homeassistant.companion.android.home
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -19,9 +20,8 @@ import io.homeassistant.companion.android.common.data.websocket.impl.entities.En
 import io.homeassistant.companion.android.common.sensors.SensorManager
 import io.homeassistant.companion.android.data.SimplifiedEntity
 import io.homeassistant.companion.android.database.AppDatabase
-import io.homeassistant.companion.android.database.sensor.Sensor
 import io.homeassistant.companion.android.database.sensor.SensorDao
-import io.homeassistant.companion.android.database.wear.Favorites
+import io.homeassistant.companion.android.database.wear.getAllFlow
 import io.homeassistant.companion.android.util.RegistriesDataHandler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -51,15 +51,17 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
         this.homePresenter = homePresenter
         loadSettings()
         loadEntities()
-        getFavorites()
-        getSensors()
     }
 
     // entities
     var entities = mutableStateMapOf<String, Entity<*>>()
         private set
-    var favoriteEntityIds = mutableStateListOf<String>()
-        private set
+
+    /**
+     * IDs of favorites in the Favorites database.
+     */
+    val favoriteEntityIds = favoritesDao.getAllFlow().collectAsState()
+
     var shortcutEntities = mutableStateListOf<SimplifiedEntity>()
         private set
     var areas = mutableListOf<AreaRegistryResponse>()
@@ -93,16 +95,12 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
     var templateTileRefreshInterval = mutableStateOf(0)
         private set
 
-    private fun favorites(): Flow<List<Favorites>>? = favoritesDao.getAllFlow()
-
-    private fun sensors(): Flow<List<Sensor>>? = sensorsDao.getAllFlow()
-
     fun supportedDomains(): List<String> = HomePresenterImpl.supportedDomains
 
     fun stringForDomain(domain: String): String? =
         HomePresenterImpl.domainsWithNames[domain]?.let { app.applicationContext.getString(it) }
 
-    var sensors = mutableStateListOf<Sensor>()
+    val sensors = sensorsDao.getAllFlow().collectAsState()
 
     private fun loadSettings() {
         viewModelScope.launch {
@@ -261,26 +259,20 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
                 .first { basicSensor -> basicSensor.id == sensorId }
             updateSensorEntity(sensorsDao, basicSensor, isEnabled)
 
-            if (isEnabled)
+            if (isEnabled) try {
                 sensorManager.requestSensorUpdate(app)
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception while requesting update for sensor $sensorId", e)
+            }
         }
     }
 
-    private fun updateSensorEntity(
+    private suspend fun updateSensorEntity(
         sensorDao: SensorDao,
         basicSensor: SensorManager.BasicSensor,
         isEnabled: Boolean
     ) {
-
-        var sensorEntity = sensorDao.get(basicSensor.id)
-        if (sensorEntity != null) {
-            sensorEntity.enabled = isEnabled
-            sensorEntity.lastSentState = ""
-            sensorDao.update(sensorEntity)
-        } else {
-            sensorEntity = Sensor(basicSensor.id, isEnabled, false, "")
-            sensorDao.add(sensorEntity)
-        }
+        sensorDao.setSensorsEnabled(listOf(basicSensor.id), isEnabled)
     }
 
     fun getAreaForEntity(entityId: String): AreaRegistryResponse? =
@@ -289,30 +281,15 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
     fun getCategoryForEntity(entityId: String): String? =
         RegistriesDataHandler.getCategoryForEntity(entityId, entityRegistry)
 
-    private fun getFavorites() {
-        viewModelScope.launch {
-            favorites()?.collect {
-                favoriteEntityIds.clear()
-                for (favorite in it) {
-                    favoriteEntityIds.add(favorite.id)
-                }
-            }
-        }
-    }
+    fun getHiddenByForEntity(entityId: String): String? =
+        RegistriesDataHandler.getHiddenByForEntity(entityId, entityRegistry)
 
+    /**
+     * Clears all favorites in the database.
+     */
     fun clearFavorites() {
-        favoriteEntityIds.clear()
-        favoritesDao.deleteAll()
-    }
-
-    private fun getSensors() {
         viewModelScope.launch {
-            sensors()?.collect {
-                sensors.clear()
-                for (sensor in it) {
-                    sensors.add(sensor)
-                }
-            }
+            favoritesDao.deleteAll()
         }
     }
 
@@ -371,33 +348,33 @@ class MainViewModel @Inject constructor(application: Application) : AndroidViewM
         }
     }
 
-    fun addFavorites(favorites: Favorites) {
-        favoritesDao.add(favorites)
-        updateFavoritePositions()
-    }
-
-    private fun updateFavorites(favorites: Favorites) {
-        favoritesDao.update(favorites)
-        updateFavoritePositions()
-    }
-
-    fun removeFavorites(id: String) {
-        favoritesDao.delete(id)
-        updateFavoritePositions()
-    }
-
-    private fun updateFavoritePositions() {
-        var i = 1
+    fun addFavoriteEntity(entityId: String) {
         viewModelScope.launch {
-            favoritesDao.getAll()?.forEach { favorites ->
-                if (i != i)
-                    updateFavorites(Favorites(favorites.id, i))
-                i++
-            }
+            favoritesDao.addToEnd(entityId)
+        }
+    }
+
+    fun removeFavoriteEntity(entityId: String) {
+        viewModelScope.launch {
+            favoritesDao.delete(entityId)
         }
     }
 
     fun logout() {
         homePresenter.onLogoutClicked()
     }
+
+    /**
+     * Convert a Flow into a State object that updates until the view model is cleared.
+     */
+    private fun <T> Flow<T>.collectAsState(
+        initial: T
+    ): State<T> {
+        val state = mutableStateOf(initial)
+        viewModelScope.launch {
+            collect { state.value = it }
+        }
+        return state
+    }
+    private fun <T> Flow<List<T>>.collectAsState(): State<List<T>> = collectAsState(initial = emptyList())
 }
