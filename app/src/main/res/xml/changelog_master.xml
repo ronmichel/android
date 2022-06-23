@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+    <release version="2022.7">
+        <change>Bug fixes, performance improvements, design tweaks and dependency updates</change>
+    </release>
+</changelog>
